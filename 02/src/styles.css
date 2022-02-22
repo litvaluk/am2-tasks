@@ -1,0 +1,36 @@
+html {
+  font-family: monospace;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  font: inherit;
+  background: #5102ac;
+  border: 1px solid #5102ac;
+  color: white;
+  cursor: pointer;
+  margin: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 2rem;
+  border-radius: 0.5rem;
+  align-self: center;
+}
+
+button:focus {
+  outline: none;
+}
+
+button:hover,
+button:active {
+  background: #832ee4;
+  border-color: #832ee4;
+}
+
+p {
+  align-self: center;
+  font-size: x-large;
+}

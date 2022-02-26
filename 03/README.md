@@ -1,4 +1,7 @@
 # Task 3
+Simple HTTP Node.js server in Docker. Files:
+* ```src/service.js``` - node.js http server
+* ```src/Dockerfile``` - file with instructions to assemble the image
 
 ## Build image
 ```
@@ -14,3 +17,6 @@ docker run -dp 8888:8080 --name hello-service hello-service-image
 ```
 curl localhost:8888/John
 ```
+
+## Complete log
+[log.txt](log.txt)

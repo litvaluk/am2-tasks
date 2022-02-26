@@ -1,0 +1,29 @@
+❯ docker build -t hello-service-image ./src
+[+] Building 1.9s (8/8) FINISHED
+ => [internal] load build definition from Dockerfile                                                               0.0s
+ => => transferring dockerfile: 36B                                                                                0.0s
+ => [internal] load .dockerignore                                                                                  0.0s
+ => => transferring context: 2B                                                                                    0.0s
+ => [internal] load metadata for docker.io/library/node:alpine                                                     1.8s
+ => [auth] library/node:pull token for registry-1.docker.io                                                        0.0s
+ => [1/3] FROM docker.io/library/node:alpine@sha256:250e9a093b861c330be2f4d1d224712d4e49290eeffc287ad190b120c1fe9  0.0s
+ => [internal] load build context                                                                                  0.0s
+ => => transferring context: 32B                                                                                   0.0s
+ => CACHED [2/3] COPY service.js ./                                                                                0.0s
+ => exporting to image                                                                                             0.0s
+ => => exporting layers                                                                                            0.0s
+ => => writing image sha256:8eaa43c4ddd2cffa446a5920cd453714c940472240164f104e09c9d576e39ed0                       0.0s
+ => => naming to docker.io/library/hello-service-image                                                             0.0s
+
+Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
+❯ docker run -dp 8888:8080 --name hello-service hello-service-image
+7202ed9213a4b7e02ecc9f0424a11a83c834e8e1cfb2a4312a868a2aa4387ca3
+❯ docker container ls
+CONTAINER ID   IMAGE                 COMMAND                  CREATED         STATUS         PORTS                    NAMES
+7202ed9213a4   hello-service-image   "docker-entrypoint.s…"   5 seconds ago   Up 4 seconds   0.0.0.0:8888->8080/tcp   hello-service
+❯ curl localhost:8888/Alice
+Hello Alice%
+❯ curl localhost:8888/Bob
+Hello Bob%
+❯ docker stop hello-service
+hello-service

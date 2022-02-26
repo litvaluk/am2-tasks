@@ -1,5 +1,5 @@
 FROM node:alpine
 WORKDIR /
-COPY service.js ./
+COPY server.js ./
 EXPOSE 8080
-CMD ["node", "service.js"]
+CMD ["node", "server.js"]

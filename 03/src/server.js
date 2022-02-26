@@ -20,5 +20,5 @@ http.createServer((req, res) => {
   }
 
 }).listen(port, hostname, () => {
-  console.log(`Hello service running at http://${hostname}:${port}/`);
+  console.log(`Hello server running at http://${hostname}:${port}/`);
 });

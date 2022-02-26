@@ -1,18 +1,18 @@
 const button = document.getElementById('fetch-btn');
 const info = document.getElementById('status-text');
 
-const fetchData = async () => {
+const fetchData = () => {
     const xhr = new XMLHttpRequest();
     
     xhr.onreadystatechange = () => {
       console.log(`STATE CHANGED -> ${xhr.readyState}`);
-      if (xhr.readyState === xhr.OPENED) {
+      if (xhr.readyState === XMLHttpRequest.OPENED) {
         info.textContent = 'LOADING';
-      } else if (xhr.readyState === xhr.HEADERS_RECEIVED) {
+      } else if (xhr.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
         info.textContent = 'LOADED';
-      } else if (xhr.readyState === xhr.LOADING) {
+      } else if (xhr.readyState === XMLHttpRequest.LOADING) {
         info.textContent = 'DOWNLOADING';
-      } else if (xhr.readyState === xhr.DONE) {
+      } else if (xhr.readyState === XMLHttpRequest.DONE) {
         info.textContent = 'FINISHED DOWNLOADING';
       }
     };

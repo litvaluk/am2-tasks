@@ -2,12 +2,12 @@ const net = require('net');
 
 const port = 8124;
 
-var orderOpened = false;
-var orderItems = [];
-
 const server = net.createServer((c) => {
   console.log(`client connected (${c.remoteAddress})`);
   c.setEncoding('utf8');
+
+  var orderOpened = false;
+  var orderItems = [];
 
   c.on('data', (data) => {
     const str = data.toString().replace(/\s+/g, ' ').trim();

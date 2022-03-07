@@ -101,5 +101,5 @@ http.createServer((req, res) => {
   }
 
 }).listen(port, hostname, () => {
-  console.log(`server started on port ${port}/`);
+  console.log(`server started on port ${port}`);
 });

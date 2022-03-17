@@ -46,3 +46,6 @@ docker run -dp 8080:8080 --name address-server --link redis-server address-serve
 ```
 curl localhost:8080/person/John/address
 ```
+
+## Complete log
+[log.txt](log.txt)

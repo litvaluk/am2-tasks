@@ -11,9 +11,8 @@ const redisClient = redis.createClient({
 });
 
 redisClient.connect().then(() => {
-
+  console.log('Connected to redis')
   http.createServer((req, res) => {
-
     if ((id = req.url.match('^/person/([A-Za-z0-9]+)/address$'))) {
       if (req.method == "GET") {
         res.writeHead(200, {
@@ -34,9 +33,9 @@ redisClient.connect().then(() => {
       });
       res.end('404 Not Found');
     }
-
   }).listen(port, hostname, () => {
     console.log(`Address server running at http://${hostname}:${port}/`);
   });
-
+}).catch(err => {
+  console.error('Error while connecting to redis', err)
 });

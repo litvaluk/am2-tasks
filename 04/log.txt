@@ -1,0 +1,48 @@
+❯ docker pull redis:alpine
+alpine: Pulling from library/redis
+59bf1c3509f3: Already exists
+719adce26c52: Pull complete
+b8f35e378c31: Pull complete
+d034517f789c: Pull complete
+3772d4d76753: Pull complete
+211a7f52febb: Pull complete
+Digest: sha256:79a37f6f01eb01a795bcb8812fd50c5badacd94c7c8e37195f52ba85894018f3
+Status: Downloaded newer image for redis:alpine
+docker.io/library/redis:alpine
+❯ docker run -d --name redis-server redis:alpine
+27c0550e5104fa9a18e038679b828c600c9db2aef3e30aefb812c4ae6d37f63e
+❯ docker run -d --name redis-client --link redis-server redis:alpine
+ce576cdf009570d08af66e16e0458aa5d568aef78b6d31eb81f3d85b74516200
+❯ docker exec -it redis-client sh
+/data # redis-cli -h redis-server
+redis-server:6379> set John "Thakurova 9, 160 00, Prague"
+OK
+redis-server:6379> set Alice "Sokolovska 2080, 180 00, Prague"
+OK
+redis-server:6379> set Bob "Korunni 810, 101 00, Prague"
+OK
+redis-server:6379> exit
+/data # exit
+❯ docker build -t address-server-image ./src
+[+] Building 0.1s (9/9) FINISHED
+ => [internal] load build definition from Dockerfile                                                               0.0s
+ => => transferring dockerfile: 36B                                                                                0.0s
+ => [internal] load .dockerignore                                                                                  0.0s
+ => => transferring context: 2B                                                                                    0.0s
+ => [internal] load metadata for docker.io/library/node:alpine                                                     0.0s
+ => [internal] load build context                                                                                  0.0s
+ => => transferring context: 31B                                                                                   0.0s
+ => [1/4] FROM docker.io/library/node:alpine                                                                       0.0s
+ => CACHED [2/4] WORKDIR /app                                                                                      0.0s
+ => CACHED [3/4] COPY server.js ./                                                                                 0.0s
+ => CACHED [4/4] RUN npm install redis                                                                             0.0s
+ => exporting to image                                                                                             0.0s
+ => => exporting layers                                                                                            0.0s
+ => => writing image sha256:24ab53c42a47d1d42084daa6a5d12774b29d35c3cbe5f4e269043033e0140613                       0.0s
+ => => naming to docker.io/library/address-server-image                                                            0.0s
+
+Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
+❯ docker run -dp 8080:8080 --name address-server --link redis-server address-server-image
+135c418007d992f7584af3ca309a411f7404788408f1f746155f3af54a445785
+❯ curl localhost:8080/person/John/address
+Thakurova 9, 160 00, Prague

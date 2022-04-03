@@ -20,7 +20,7 @@ docker run -d --name redis-client --link redis-server redis:alpine
 docker exec -it redis-client sh
 ```
 
-## Connect to the server inside the Redis server container
+## Connect to the server from the Redis client container
 ```
 redis-cli -h redis-server
 ```

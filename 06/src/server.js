@@ -12,8 +12,8 @@ const resources = [
 ]
 
 const server = http2.createSecureServer({
-  key: fs.readFileSync('localhost-privkey.pem'),
-  cert: fs.readFileSync('localhost-cert.pem')
+  key: fs.readFileSync(path.join(__dirname, 'localhost-privkey.pem')),
+  cert: fs.readFileSync(path.join(__dirname, 'localhost-cert.pem'))
 });
 
 server.on('error', (err) => console.error(err));

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>AM2 - Task 8</title>
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Roboto:500);
+
+      #google-login {
+        display: none;
+      }
+
+      #logged {
+        display: none;
+        text-align: center;
+      }
+
+      .google-btn {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: -21px;
+        margin-left: -92px;
+        width: 184px;
+        height: 42px;
+        background-color: #4285f4;
+        border-radius: 2px;
+        box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.25);
+      }
+
+      .google-btn .google-icon-wrapper {
+        position: absolute;
+        margin-top: 1px;
+        margin-left: 1px;
+        width: 40px;
+        height: 40px;
+        border-radius: 2px;
+        background-color: #fff;
+      }
+
+      .google-btn .google-icon {
+        position: absolute;
+        margin-top: 11px;
+        margin-left: 11px;
+        width: 18px;
+        height: 18px;
+      }
+
+      .google-btn .btn-text {
+        float: right;
+        margin: 12px 8px 0 0;
+        color: #fff;
+        font-size: 14px;
+        letter-spacing: 0.2px;
+        font-family: "Roboto";
+      }
+
+      .google-btn:hover {
+        box-shadow: 0 0 6px #4285f4;
+        cursor: pointer;
+      }
+
+      .google-btn:active {
+        background: #1669F2;
+      }
+    </style>
+  </head>
+  <body>
+    
+    <div id="google-login">
+      <div class="google-btn" onclick="loginWithGoogle()">
+        <div class="google-icon-wrapper">
+          <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"/>
+        </div>
+        <p class="btn-text"><b>Sign in with Google</b></p>
+      </div>
+    </div>
+
+    <div id="logged">
+      <p id="hello"></p>
+    </div>
+
+    <script>
+      const scope = 'profile https://www.googleapis.com/auth/contacts.readonly';
+      const clientId = '159678391400-2qb1n5rr9q987q36ste1m75vhttqomjj.apps.googleusercontent.com';
+      const redirectUri = 'https://localhost:3000/auth/google';
+      const loginUri = `https://accounts.google.com/o/oauth2/v2/auth?scope=${scope}&include_granted_scopes=true&response_type=token&state=state_parameter_passthrough_value&redirect_uri=${redirectUri}&client_id=${clientId}`
+
+      function loginWithGoogle() {
+        window.open(loginUri, '_self');
+      }
+      
+      function getProfile() {
+        fetch('https://people.googleapis.com/v1/people/me?personFields=names,emailAddresses', {
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${window.localStorage.getItem('accessToken')}`,
+          }
+        }).then((response) => {
+          if (response.status == 401) {
+            window.localStorage.removeItem('accessToken');
+            loginWithGoogle();
+          }
+          return response.json();
+        }).then((data) => {
+          document.getElementById('hello').innerText = `Hello ${data.names[0].displayName}!`;
+        });
+      }
+
+      function checkToken() {
+        localStorageAccessToken = window.localStorage.getItem('accessToken');
+        if (localStorageAccessToken) {
+          accessToken = localStorageAccessToken;
+        } else {
+          const afterHash = window.location.hash.substring(1);
+
+          if (!afterHash) {
+            document.getElementById('google-login').style.display = 'block';
+            return;
+          }
+
+          const params = new URLSearchParams(afterHash);
+
+          accessToken = params.get('access_token');
+
+          if (!accessToken) {
+            document.getElementById('google-login').style.display = 'block';
+            return;
+          }
+
+          window.localStorage.setItem('accessToken', accessToken);
+          window.location.href = '/';
+          return;
+        }
+
+        document.getElementById('google-login').style.display = 'none';
+        document.getElementById('logged').style.display = 'block';
+        
+        getProfile();
+      }
+
+      checkToken();
+    </script>
+  </body>
+</html>

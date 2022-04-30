@@ -4,36 +4,20 @@ const path = require('path');
 
 const hostname = 'localhost';
 const port = 3000;
-const serverRoot = "./public";
-const options = {
-  key: fs.readFileSync('localhost-privkey.pem'),
-  cert: fs.readFileSync('localhost-cert.pem')
-}
 
-const server = http2.createSecureServer(options);
+const server = http2.createSecureServer({
+  key: fs.readFileSync(path.join(__dirname, 'localhost-privkey.pem')),
+  cert: fs.readFileSync(path.join(__dirname, 'localhost-cert.pem'))
+});
 
 server.on('error', (err) => console.error(err));
 
 server.on('stream', (stream, headers) => {
-  var reqPath = headers[http2.constants.HTTP2_HEADER_PATH];
-  if (reqPath === '/') {
-    reqPath = '/index.html';
-  }
-  
-  var responseMimeType;
-  if (reqPath.endsWith('.js')) {
-    responseMimeType = 'application/javascript';
-  } else if (reqPath.endsWith('.css')) {
-    responseMimeType = 'text/css';
-  } else if (reqPath.endsWith('.html')) {
-    responseMimeType = 'text/html';
-  } else {
-    responseMimeType = 'text/plain';
-  }
-
-  stream.respondWithFile(path.join(serverRoot, reqPath), {
-      'content-type': responseMimeType
+  stream.respond({
+    'content-type': 'text/html',
+    ':status': 200
   });
+  stream.end(fs.readFileSync(path.join(__dirname, 'index.html')));
 });
 
 server.listen(port, hostname, () => console.log(`Server running at https://${hostname}:${port}/`));
